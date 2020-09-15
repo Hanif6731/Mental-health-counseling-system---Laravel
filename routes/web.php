@@ -16,8 +16,10 @@ use App\Http\Controllers;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/banned',function (){
+    return view('ban');
+});
 Auth::routes();
 
-Route::get('/home', [Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('doctor',Controllers\DoctorController::class);
+Route::middleware('status')->get('/home', [Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('status')->resource('doctor',Controllers\DoctorController::class);
