@@ -23,3 +23,6 @@ Auth::routes();
 
 Route::middleware('status')->get('/home', [Controllers\HomeController::class, 'index'])->name('home');
 Route::middleware('status')->resource('doctor',Controllers\DoctorController::class);
+
+Route::get('login/github', [Controllers\Auth\LoginController::class,'redirectToProvider'])->name('login.github');
+Route::get('login/github/callback', [Controllers\Auth\LoginController::class,'handleProviderCallback']);
