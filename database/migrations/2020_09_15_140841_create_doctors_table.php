@@ -22,7 +22,7 @@ class CreateDoctorsTable extends Migration
             $table->string('specialty');
             $table->string('photo')->default('doctor.png');
             $table->integer('userId')->unique();
-            $table->string('status')->default('Invalid');
+            $table->string('docStatus')->default('Invalid');
             $table->timestamps();
         });
     }

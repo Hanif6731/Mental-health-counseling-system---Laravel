@@ -31,11 +31,12 @@ class DoctorController extends Controller
     {
         //print_r(Auth::user());
         $doctor=DB::table('doctors')
+            ->rightJoin('users','doctors.userId','=','users.id')
             ->where('userId','=',Auth::user()->id)
             ->get();
         //print_r($doctor);
         if(count($doctor)) {
-
+            //dd($doctor);
             return view('doctor.index')->with('user', $doctor[0]);
         }
         else {
