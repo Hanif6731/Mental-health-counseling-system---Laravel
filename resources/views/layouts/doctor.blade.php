@@ -23,7 +23,7 @@
 <div id="app">
     <nav class="navbar navbar-expand-md sticky-top text-white bg-dark shadow-sm">
         <div class="container">
-            <a class="navbar-brand text-white" href="{{ url('/') }}">
+            <a class="navbar-brand text-white" href="{{ route('doctor.index') }}">
                 {{ config('app.name', 'Mental Health Counseling System') }}
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -49,7 +49,9 @@
                             </li>
                         @endif
                     @else
-
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{route('doctor.index')}}">Home</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }}
@@ -57,9 +59,13 @@
 
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item text-dark" href="#">
+                                <a id="ddDropdown" class="dropdown-item dropdown-toggle text-dark" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ __('Profile settings') }}
                                 </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ddDropdown">
+                                    <a class="dropdown-item text-dark" href="{{route('doctor.edit',Auth::User()->id)}}">{{__('Edit Profile')}}</a>
+                                    <a class="dropdown-item text-dark" href="#">{{__('Delete Profile')}}</a>
+                                </div>
                                 <a class="dropdown-item text-dark" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DoctorRequests;
+use App\Http\Requests\DoctorUpdateRequests;
 use App\Models\Doctor;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DoctorController extends Controller
 {
@@ -129,15 +132,18 @@ class DoctorController extends Controller
      * @param  \App\Models\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,Doctor $doctor)
+    public function edit(Request $request,$doctor)
     {
-        $doctor=DB::table('doctors')
-            ->where('userId','=',Auth::user()->id)
+        $doc=DB::table('doctors')
+            ->where('userId','=',$doctor)
             ->get();
         //print_r($doctor);
-        if(count($doctor)) {
-
-            return view('doctor.index')->with('user', $doctor[0]);
+        if(count($doc)) {
+            $doc=DB::table('users')
+                ->leftJoin('doctors','users.id','=','doctors.userId')
+                ->where('userId',$doctor)
+                ->get();
+            return view('doctor.edit')->with('user', $doc[0]);
         }
         else {
             $request->session()->flash('msg','Please Complete Your Profile');
@@ -152,9 +158,56 @@ class DoctorController extends Controller
      * @param  \App\Models\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Doctor $doctor)
+    public function update(DoctorUpdateRequests $request, $doctor)
     {
-        //
+        $user=User::find($doctor);
+        $doctor=DB::table('doctors')
+            ->where('userId',$doctor)
+            ->get();
+        $doctor=Doctor::find($doctor[0]->id);
+        if($request->password!=null && $request->new_password!=null){
+            if(Hash::check($request->password,$user->password)){
+                if(strlen($request->new_password)>=8) {
+                    $user->password = Hash::make($request->new_password);
+                }
+                else{
+                    $request->session()->flash('msg','Password Should be longer than 8 characters');
+                    return redirect()->route('doctor.edit',Auth::user()->id);
+                }
+            }
+            else{
+                $request->session()->flash('msg','Incorrect current password');
+                return redirect()->route('doctor.edit',Auth::user()->id);
+            }
+
+        }
+        $user->name=$request->name;
+        $doctor->phone=$request->phone;
+        $doctor->gender=$request->gender;
+        $doctor->license=$request->license;
+        $doctor->qualifications=$request->qualifications;
+        $doctor->specialty=$request->specialty;
+
+        if($request->hasFile('photo')){
+            $file=$request->file('photo');
+//            echo "File Name: ". $file->getClientOriginalName()."<br>";
+//            echo "File Extension: ". $file->getClientOriginalExtension()."<br>";
+//            echo "File Size: ". $file->getSize()."<br>";
+//            echo "File Mime Type: ". $file->getMimeType();
+            $filename=$file->getClientOriginalName();
+
+            if($file->move('img', $filename)){
+                $doctor->photo=$filename;
+
+            }
+
+        }
+        //dd($request);
+        $user->save();
+        $doctor->save();
+        return redirect()->route('doctor.index');
+
+
     }
 
     /**
