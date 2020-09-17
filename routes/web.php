@@ -26,3 +26,11 @@ Route::middleware('status')->resource('doctor',Controllers\DoctorController::cla
 
 Route::get('login/github', [Controllers\Auth\LoginController::class,'redirectToProvider'])->name('login.github');
 Route::get('login/github/callback', [Controllers\Auth\LoginController::class,'handleProviderCallback']);
+Route::group(['middleware'=>'DoctorProfile'],function(){
+    Route::group(['middleware'=>'docValidity'],function (){
+        Route::resource('doctor.appointment',Controllers\DocAppointmentController::class);
+    });
+    Route::get('doctor/{id}/invalid',[Controllers\DoctorController::class,'invalid'])->name('doctor.invalid');
+});
+
+

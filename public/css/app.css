@@ -8295,7 +8295,7 @@ button.bg-dark:focus {
 }
 
 .shadow-sm {
-  box-shadow: 0 0.125rem 0.5rem darkseagreen !important;
+  box-shadow: 0 0.125rem 0.35rem mediumspringgreen !important;
 }
 
 .shadow {

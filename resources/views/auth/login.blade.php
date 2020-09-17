@@ -54,7 +54,7 @@
                         <div class="form-group row">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
+                                    <i class="fa fa-sign-in-alt"></i> {{ __('Login') }}
                                 </button>
 
                                 @if (Route::has('password.request'))
@@ -66,7 +66,7 @@
                         </div>
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <a href="{{route('login.github')}}" class="btn btn-secondary btn-block">Sign in with github as a doctor</a>
+                                <a href="{{route('login.github')}}" class="btn btn-secondary btn-block"><i class="fab fa-github fa-lg"></i> Sign in with github as a doctor</a>
                             </div>
                         </div>
                     </form>

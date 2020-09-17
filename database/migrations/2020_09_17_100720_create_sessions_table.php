@@ -16,7 +16,7 @@ class CreateSessionsTable extends Migration
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
             $table->string('sessionType')->default('Chat');
-            $table->dateTime('starTime')->default(Carbon\Carbon::now()->toDateTimeString());
+            $table->dateTime('starTime')->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('endTime')->nullable();
             $table->integer('docId');
             $table->integer('patientId');

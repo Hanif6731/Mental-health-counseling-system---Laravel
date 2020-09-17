@@ -21,6 +21,7 @@ class DoctorController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
     }
     /**
      * Display a listing of the resource.
@@ -36,7 +37,14 @@ class DoctorController extends Controller
             ->get();
         //print_r($doctor);
         if(count($doctor)) {
+            if($request->session()->has('docId')==false){
+                $doc=DB::table('doctors')
+                    ->where('userId','=',Auth::user()->id)
+                    ->get()[0];
+                $request->session()->put('docId',$doc->id);
+            }
             //dd($doctor);
+            //echo $request->session()->get('docId');
             return view('doctor.index')->with('user', $doctor[0]);
         }
         else {
@@ -162,10 +170,7 @@ class DoctorController extends Controller
     public function update(DoctorUpdateRequests $request, $doctor)
     {
         $user=User::find($doctor);
-        $doctor=DB::table('doctors')
-            ->where('userId',$doctor)
-            ->get();
-        $doctor=Doctor::find($doctor[0]->id);
+        $doctor=Doctor::find($request->session()->get('docId'));
         if($request->password!=null && $request->new_password!=null){
             if(Hash::check($request->password,$user->password)){
                 if(strlen($request->new_password)>=8) {
@@ -220,5 +225,9 @@ class DoctorController extends Controller
     public function destroy(Doctor $doctor)
     {
         //
+    }
+
+    public function invalid(Request $request){
+        return view('doctor.invalid');
     }
 }

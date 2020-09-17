@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\DoctorProfileCompletion;
+use App\Http\Middleware\DoctorValidity;
 use App\Http\Middleware\VerifyStatus;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -66,5 +67,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'DoctorProfile'=>DoctorProfileCompletion::class,
         'status'=>VerifyStatus::class,
+        'docValidity'=>DoctorValidity::class,
     ];
 }

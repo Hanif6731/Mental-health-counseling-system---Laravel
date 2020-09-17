@@ -10,7 +10,13 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+
+{{--    <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">--}}
+{{--    <script src="{{asset('js/jquery.js')}}" defer type="application/javascript"></script>--}}
+{{--    <script src="{{asset('js/popper.js')}}" defer type="application/javascript"></script>--}}
+{{--    <script src="{{ asset('js/bootstrap.js') }}" type="application/javascript"></script>--}}
+    <script src="{{asset('js/app.js')}}" defer></script>
+    <script src="{{asset('js/docScript.js')}}" defer type="application/javascript"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +24,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{asset('css/all.css')}}" rel="stylesheet">
+
 </head>
 <body>
 <div id="app">
@@ -41,35 +49,38 @@
                     <!-- Authentication Links -->
                     @guest
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            <a class="nav-link text-white" href="{{ route('login') }}"><i class="fa fa-sign-in"></i> {{ __('Login') }}</a>
                         </li>
                         @if (Route::has('register'))
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                <a class="nav-link text-white" href="{{ route('register') }}"><i class="fa fa-sign"></i> {{ __('Register') }}</a>
                             </li>
                         @endif
                     @else
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{route('doctor.index')}}">Home</a>
+                            <a class="nav-link text-white" href="{{route('doctor.index')}}"><i class="fa fa-home"></i> Home</a>
                         </li>
+                    <li>
+                        <a class="nav-link text-white" href="{{route('doctor.appointment.index',Auth::user()->id)}}"><i class="fa fa-list"></i> Appointments</a>
+                    </li>
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
+                                <i class="fa fa-user"></i> {{ Auth::user()->name }}
                             </a>
 
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a id="ddDropdown" class="dropdown-item dropdown-toggle text-dark" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ __('Profile settings') }}
+                                    <i class="fa fa-user-cog"></i> {{ __('Profile settings') }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ddDropdown">
-                                    <a class="dropdown-item text-dark" href="{{route('doctor.edit',Auth::User()->id)}}">{{__('Edit Profile')}}</a>
-                                    <a class="dropdown-item text-dark" href="#">{{__('Delete Profile')}}</a>
+                                    <a class="dropdown-item text-dark" href="{{route('doctor.edit',Auth::User()->id)}}"><i class="fa fa-user-edit"></i> {{__('Edit Profile')}}</a>
+                                    <a class="dropdown-item text-dark" href="#"><i class="fa fa-user-minus"></i> {{__('Delete Profile')}}</a>
                                 </div>
                                 <a class="dropdown-item text-dark" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    <i class="fa fa-sign-out-alt"></i> {{ __('Logout') }}
                                 </a>
 
 
@@ -82,7 +93,7 @@
                             <form class="form-inline">
                                 @csrf
                                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" data-toggle="tooltip" data-placement="bottom" title="Search"><i class="fa fa-search"></i></button>
                             </form>
                         </li>
                     @endguest
