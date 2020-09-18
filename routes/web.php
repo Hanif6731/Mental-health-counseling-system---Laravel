@@ -33,6 +33,7 @@ Route::group(['middleware'=>'DoctorProfile'],function(){
         ->name('appointment.accept');
         Route::put('appointment/{id}/decline',[Controllers\DocAppointmentController::class,'decline'])
             ->name('appointment.decline');
+        Route::get('doctor/appointment/search/{str}',[Controllers\DocAppointmentController::class,'search'])->name('appointment.search');
     });
     Route::get('doctor/{id}/invalid',[Controllers\DoctorController::class,'invalid'])->name('doctor.invalid');
 });

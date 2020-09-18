@@ -38,8 +38,17 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
+
+                <form class="form-inline mr-auto d-inline text-center w-75">
+                    @csrf
+                    <input class="form-control mr-sm-2 w-75" type="search" id="searchText" placeholder="Search Appointments by patient" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="search" data-toggle="tooltip" data-placement="bottom" title="Search"><i class="fa fa-search"></i></button>
+                </form>
+
                 <ul class="navbar-nav mr-auto">
 
                 </ul>
@@ -48,22 +57,22 @@
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
                     @guest
-                        <li class="nav-item">
+                        <li class="nav-item text-nowrap">
                             <a class="nav-link text-white" href="{{ route('login') }}"><i class="fa fa-sign-in"></i> {{ __('Login') }}</a>
                         </li>
                         @if (Route::has('register'))
-                            <li class="nav-item">
+                            <li class="nav-item text-nowrap">
                                 <a class="nav-link text-white" href="{{ route('register') }}"><i class="fa fa-sign"></i> {{ __('Register') }}</a>
                             </li>
                         @endif
                     @else
-                        <li class="nav-item">
+                        <li class="nav-item text-nowrap">
                             <a class="nav-link text-white" href="{{route('doctor.index')}}"><i class="fa fa-home"></i> Home</a>
                         </li>
-                    <li>
-                        <a class="nav-link text-white" href="{{route('doctor.appointment.index',Auth::user()->id)}}"><i class="fa fa-list"></i> Appointments</a>
-                    </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item text-nowrap">
+                            <a class="nav-link text-white" href="{{route('doctor.appointment.index',Auth::user()->id)}}"><i class="fa fa-list"></i> Appointments</a>
+                        </li>
+                        <li class="nav-item text-nowrap dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 <i class="fa fa-user"></i> {{ Auth::user()->name }}
                             </a>
@@ -89,22 +98,52 @@
                                 </form>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <form class="form-inline">
-                                @csrf
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search Appointments" aria-label="Search">
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" data-toggle="tooltip" data-placement="bottom" title="Search"><i class="fa fa-search"></i></button>
-                            </form>
+                        <li class="nav-item dropdown text-nowrap">
+                            <a id="moreDropdown" class=" nav-link dropdown-toggle text-white" href="#"
+                               role="button" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false"
+                               v-pre>
+                                <i class="fas fa-ellipsis-h" data-toggle="tooltip" data-placement="right" title="More options"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="moreDropdown">
+                                <a class="dropdown-item text-dark" href="#"><i class="fa fa-comment"></i> {{__('Chat')}}</a>
+                                <a class="dropdown-item text-dark" href="#"><i class="fa fa-sticky-note"></i> {{__('Forum')}}</a>
+                            </div>
                         </li>
+
                     @endguest
                 </ul>
             </div>
         </div>
     </nav>
 
+
+                <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary text-white">
+                                <h5 class="modal-title" id="searchLabel"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body text-left">
+                                <div id="appointmentItems" class="text-center">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
     <main class="py-4">
         @yield('content')
     </main>
+
 </div>
 </body>
 </html>

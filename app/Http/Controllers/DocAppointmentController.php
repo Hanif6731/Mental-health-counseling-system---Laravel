@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DocAppRequests;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use http\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class DocAppointmentController extends Controller
 {
@@ -32,7 +34,9 @@ class DocAppointmentController extends Controller
         $appointments=DB::table('appointments','a')
             ->join('patients','a.patientId','=','patients.id')
             ->join('users','patients.userId','=','users.id')
-            ->where('docId',$docId)->get();
+            ->where('docId',$docId)
+            ->orderByDesc('aid')
+            ->get();
         //dd($appointments);
 
         for($i=0;$i<count($appointments);$i++){
@@ -145,5 +149,14 @@ class DocAppointmentController extends Controller
         $appointment->reqStatus='Declined';
         $appointment->save();
         return redirect()->route('doctor.appointment.index',Auth::user()->id);
+    }
+
+    public function search(Request $request,$str){
+        //$client=new \GuzzleHttp\Client();
+        $docId=$request->session()->get('docId');
+        //$response=$client->request('GET','http://localhost:3000/search/'.$docId.'/'.$str);
+        //dd($response->getBody());
+        $response=Http::get('http://localhost:3000/search/'.$docId.'/'.$str);
+        return $response->json();
     }
 }
