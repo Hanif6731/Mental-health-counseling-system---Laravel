@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class HealthRecord extends Model
 {
     use HasFactory;
+    protected $primaryKey='hrid';
 }

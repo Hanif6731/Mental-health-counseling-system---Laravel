@@ -29,6 +29,10 @@ Route::get('login/github/callback', [Controllers\Auth\LoginController::class,'ha
 Route::group(['middleware'=>'DoctorProfile'],function(){
     Route::group(['middleware'=>'docValidity'],function (){
         Route::resource('doctor.appointment',Controllers\DocAppointmentController::class);
+        Route::put('doctor/{docId}/appointment/{id}/accept',[Controllers\DocAppointmentController::class,'accept'])
+        ->name('appointment.accept');
+        Route::put('appointment/{id}/decline',[Controllers\DocAppointmentController::class,'decline'])
+            ->name('appointment.decline');
     });
     Route::get('doctor/{id}/invalid',[Controllers\DoctorController::class,'invalid'])->name('doctor.invalid');
 });

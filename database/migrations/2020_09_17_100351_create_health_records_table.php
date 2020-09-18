@@ -14,7 +14,7 @@ class CreateHealthRecordsTable extends Migration
     public function up()
     {
         Schema::create('health_records', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('hrid');
             $table->integer('height');
             $table->integer('weight');
             $table->integer('bp');

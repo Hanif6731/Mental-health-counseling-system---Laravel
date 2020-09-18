@@ -92,7 +92,7 @@
                         <li class="nav-item">
                             <form class="form-inline">
                                 @csrf
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search Appointments" aria-label="Search">
                                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit" data-toggle="tooltip" data-placement="bottom" title="Search"><i class="fa fa-search"></i></button>
                             </form>
                         </li>

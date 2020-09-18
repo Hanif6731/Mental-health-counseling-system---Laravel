@@ -14,7 +14,7 @@ class CreateSessionsTable extends Migration
     public function up()
     {
         Schema::create('sessions', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('seid');
             $table->string('sessionType')->default('Chat');
             $table->dateTime('starTime')->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('endTime')->nullable();

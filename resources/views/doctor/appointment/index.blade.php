@@ -21,11 +21,11 @@
                         @foreach($info->all() as $item)
                         <tr>
                             <td>{{$item->name}}</td>
-                            <td>{{$item->description}}</td>
+                            <td class="text-wrap">{{$item->description}}</td>
                             <td>{{$item->reqStatus}}</td>
                             <td>{{$item->schedule}}</td>
                             <td colspan="2"><button class="btn btn-outline-success my-2 my-sm-0 {{$item->accept}}> accept" {{$item->accept}}
-                                name="accept" id="accept" data-toggle="modal" data-target="#accept{{$item->aid}}"><i class="fa fa-check fa-lg"></i> Accept</button>
+                                name="accept" id="accept" data-toggle="modal" data-target="#accept{{$item->aid}}"><i class="fa fa-check fa-lg"></i> {{$item->btnAccept}}</button>
                                 <button class="btn btn-outline-danger my-2 my-sm-0 {{$item->decline}} decline" {{$item->decline}} name="decline"
                                         id="decline"data-toggle="modal" data-target="#decline{{$item->aid}}"><i class="fa fa-times fa-lg"></i> Decline</button> </td>
                             <td>
@@ -56,8 +56,9 @@
                         </button>
                     </div>
                     <div class="modal-body text-left">
-                        <form method="post" action="#">
+                        <form method="post" action="{{route('appointment.accept',[$item->docId,$item->aid])}}">
                             @csrf
+                            @method('PUT')
                             <div class="form-group">
                                 <label for="schedule">Date:</label>
                                 <input type="datetime-local" name="schedule" class="form-control"/>
@@ -71,6 +72,11 @@
                                 <input type="submit" class="btn btn-outline-success my-2 my-sm-0" value="Done"/>
                             </div>
                         </form>
+                        <div class="text-danger text-center">
+                            @foreach($errors->all() as $err)
+                                {{$err}} <br>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,8 +93,13 @@
                         </button>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <a  class="btn btn-primary text-decoration-none" href="#">Decline</a>
+                        <form method="post" action="{{route('appointment.decline',$item->aid)}}">
+                            @csrf
+                            @method('PUT')
+
+                            <input type="submit" value="Decline" class="btn btn-outline-primary my-2 my-sm-0"/>
+                        </form>
+                        <button type="button" class="btn btn-outline-secondary my-2 my-sm-0" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

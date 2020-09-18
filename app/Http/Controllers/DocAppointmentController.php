@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DocAppRequests;
 use App\Models\Appointment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DocAppointmentController extends Controller
@@ -37,6 +40,7 @@ class DocAppointmentController extends Controller
             $value->accept='';
             $value->decline='';
             $value->start='';
+            $value->btnAccept='Accept';
             $req=strtolower($value->reqStatus);
             if($req==strtolower('requested')){
                 $value->start='disabled';
@@ -44,11 +48,15 @@ class DocAppointmentController extends Controller
             }
             elseif($req==strtolower('accepted')){
                 $value->decline='disabled';
+                $value->btnAccept='Change Schedule';
             }
             elseif ($req==strtolower('declined') || $req==strtolower('ended')){
                 $value->decline='disabled';
                 $value->accept='disabled';
                 $value->start='disabled';
+            }
+            if($value->schedule!=null){
+                $value->schedule=date('Y-m-d h:i A',strtotime($value->schedule));
             }
             $appointments[$i]=$value;
 
@@ -121,5 +129,21 @@ class DocAppointmentController extends Controller
     public function destroy(Appointment $appointment)
     {
         //
+    }
+
+    public function accept(DocAppRequests $requests,$id){
+        $appointment=Appointment::find($id);
+        $appointment->schedule=$requests->schedule;
+        $appointment->docMsg=$requests->docMsg;
+        $appointment->reqStatus='Accepted';
+        $appointment->save();
+        return redirect()->route('doctor.appointment.index',Auth::user()->id);
+        //dd((new \DateTime($requests->schedule))->format('yyyy-MM-dd HH:mm:ss'));
+    }
+    public function decline($id){
+        $appointment=Appointment::find($id);
+        $appointment->reqStatus='Declined';
+        $appointment->save();
+        return redirect()->route('doctor.appointment.index',Auth::user()->id);
     }
 }
