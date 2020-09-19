@@ -4,9 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Forum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-class ForumController extends Controller
+class DocForumController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +27,7 @@ class ForumController extends Controller
      */
     public function index()
     {
-        //
+        return view('doctor.forum.index');
     }
 
     /**
@@ -35,7 +48,11 @@ class ForumController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post=new Forum();
+        $post->post=$request->post;
+        $post->userId=Auth::user()->id;
+        $post->save();
+        return response()->json($post);
     }
 
     /**
@@ -44,9 +61,27 @@ class ForumController extends Controller
      * @param  \App\Models\Forum  $forum
      * @return \Illuminate\Http\Response
      */
-    public function show(Forum $forum)
+    public function show($forum)
     {
-        //
+        $forum=DB::table('forums')
+            ->join('users','forums.userId','=','users.id')
+            ->orderByDesc('fpid')
+            ->get();
+//        $forum=DB::select(DB::raw(
+//            'SELECT DISTINCT forums.*, users.*, COUNT(*) as cnt FROM comments
+//JOIN forums on comments.postId=forums.fpid
+//JOIN users on forums.userId=users.id GROUP BY postId ORDER by fpid DESC'));
+//        $data = Forum::join('comments', function($join){
+//            $join->on('comments.postId', '=', 'forums.id');
+//            })->groupBy('comments.postId')
+//                    ->orderBy( DB::raw('COUNT(comments.postId)'), 'desc' )
+//                    ->select('posts.*')->
+//        $posts=Forum::join('comments',function ($join){
+//            $join->on('comments.postId','=','forums.fpid');
+//        })->groupby('comments.postId')
+//            ->orderby(DB::raw('COUNT(comments.postId)','desc'))
+//            ->get();
+        return response()->json($forum);
     }
 
     /**

@@ -17,6 +17,7 @@
 {{--    <script src="{{ asset('js/bootstrap.js') }}" type="application/javascript"></script>--}}
     <script src="{{asset('js/app.js')}}" defer></script>
     <script src="{{asset('js/docScript.js')}}" defer type="application/javascript"></script>
+{{--    <script src="{{asset('js/docForumScript.js')}}" defer type="application/javascript"></script>--}}
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -107,7 +108,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="moreDropdown">
                                 <a class="dropdown-item text-dark" href="#"><i class="fa fa-comment"></i> {{__('Chat')}}</a>
-                                <a class="dropdown-item text-dark" href="#"><i class="fa fa-sticky-note"></i> {{__('Forum')}}</a>
+                                <a class="dropdown-item text-dark" href="{{route('doctor.forum.index',Auth::user()->id)}}"><i class="fa fa-sticky-note"></i> {{__('Forum')}}</a>
                             </div>
                         </li>
 

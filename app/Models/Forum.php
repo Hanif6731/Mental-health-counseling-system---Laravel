@@ -9,4 +9,5 @@ class Forum extends Model
 {
     use HasFactory;
     protected $primaryKey='fpid';
+    const CREATED_AT = 'post_created_at';
 }

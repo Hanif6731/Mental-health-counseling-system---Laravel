@@ -9,5 +9,6 @@ class Comment extends Model
 {
     use HasFactory;
     protected $primaryKey='cid';
+    const CREATED_AT = 'comment_created_at';
 
 }

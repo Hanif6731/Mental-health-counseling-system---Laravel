@@ -34,6 +34,8 @@ Route::group(['middleware'=>'DoctorProfile'],function(){
         Route::put('appointment/{id}/decline',[Controllers\DocAppointmentController::class,'decline'])
             ->name('appointment.decline');
         Route::get('doctor/appointment/search/{str}',[Controllers\DocAppointmentController::class,'search'])->name('appointment.search');
+        Route::resource('doctor.forum',Controllers\DocForumController::class);
+        Route::resource('doctor.forum.comment',Controllers\DocCommentController::class);
     });
     Route::get('doctor/{id}/invalid',[Controllers\DoctorController::class,'invalid'])->name('doctor.invalid');
 });
