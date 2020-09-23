@@ -36,6 +36,12 @@ Route::group(['middleware'=>'DoctorProfile'],function(){
         Route::get('doctor/appointment/search/{str}',[Controllers\DocAppointmentController::class,'search'])->name('appointment.search');
         Route::resource('doctor.forum',Controllers\DocForumController::class);
         Route::resource('doctor.forum.comment',Controllers\DocCommentController::class);
+        //Route::resource('patient.docChatSession',Controllers\DocChatController::class);
+        Route::get('doctor/{patient}/chat',[Controllers\DocChatController::class,'index'])->name('docChat.index');
+        Route::post('doctor/{patient}/chat',[Controllers\DocChatController::class,'store'])->name('docChat.store');
+        Route::get('chat/{patient}/getMessages',[Controllers\DocChatController::class,'getMessages']);
+
+
     });
     Route::get('doctor/{id}/invalid',[Controllers\DoctorController::class,'invalid'])->name('doctor.invalid');
 });

@@ -30,7 +30,7 @@
                                         id="decline"data-toggle="modal" data-target="#decline{{$item->aid}}"><i class="fa fa-times fa-lg"></i> Decline</button> </td>
                             <td>
 
-                                <a class="btn btn-outline-primary my-2 my-sm-0 chat_session {{$item->start}}" {{$item->start}} href="#"><i class="fa fa-comment fa-lg"></i> Start Chat Session</a>
+                                <a class="btn btn-outline-primary my-2 my-sm-0 chat_session {{$item->start}}" {{$item->start}} href="{{route('docChat.index',$item->userId)}}"><i class="fa fa-comment fa-lg"></i> Start Chat Session</a>
 
                             </td>
                             <td><button class="btn btn-outline-primary my-2 my-sm-0 viewProfile" id="viewProfile" name="viewProfile"
