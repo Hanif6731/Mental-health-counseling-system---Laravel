@@ -35,7 +35,17 @@ class PrescriptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $prescription=new Prescription();
+        $prescription->medName=$request->medName;
+        $prescription->quantity=$request->quantity;
+        $prescription->medType=$request->medType;
+        $prescription->duration=$request->duration;
+        $prescription->timing=$request->timing;
+        $prescription->notes=$request->notes;
+        $prescription->patientId=$request->patientId;
+        $prescription->sessId=$request->sessId;
+        $prescription->save();
+        return response()->json($prescription);
     }
 
     /**

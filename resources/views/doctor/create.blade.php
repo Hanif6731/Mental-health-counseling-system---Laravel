@@ -78,9 +78,6 @@
                                 <label for="photo"><strong>Profile Picture:</strong></label>
                                 <input type="file" class="form-control-file" name="photo" id="photo" accept="image/*">
                             </div>
-                            <div class="form-group">
-                                <strong>You are agreeing to the <a class="text-decoration-none" href="#">Privacy Terms and Conditions</a> By creating an account.</strong>
-                            </div>
                             <div class="row">
                                  <div class=" col-12 text-center">
                                     <input type="submit" class="btn btn-primary pr-3 pl-3" value="Submit" id="submit"/>

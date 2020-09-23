@@ -29,19 +29,38 @@ class DocChatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,$patient)
+    public function index(Request $request,$patient,$aid)
     {
         //dd($doctor,$patient);
-        $session=new Session();
-        $session->sessionType='chat';
-        $session->startTime=Carbon::now()->toDateTimeString();
-        $session->docUId=Auth::user()->id;
-        $session->patientUId=$patient;
+        $session=DB::table('sessions')
+            ->where('appointmentId',$aid)
+            ->get();
+        if(count($session)>0){
+            $session=$session[0];
+        }
+        else {
+            $session = new Session();
+            $session->sessionType = 'chat';
+            $session->startTime = Carbon::now()->toDateTimeString();
+            $session->docUId = Auth::user()->id;
+            $session->patientUId = $patient;
+            $session->appointmentId = $aid;
+            $session->save();
+            $session=DB::table('sessions')
+                ->where('appointmentId',$aid)
+                ->get()[0];
+        }
         //dd($session);
-        $patient=User::find($patient);
+        //$patient=User::find($patient);
+        $patient=DB::table('users')
+            ->join('patients','users.id','=','patients.userId')
+            ->where('users.id','=',$patient)->get()[0];
         $request->session()->put('patientName',$patient->name);
-
-        return view('doctor.chat.index')->with('sess',$session);
+        $request->session()->put('patientId',$patient->id);
+        $request->session()->put('sessId',$session->seid);
+//        dd($patient);
+        //dd($session);
+       return view('doctor.chat.index')->with('sess',$session);
     }
 
     /**
@@ -60,7 +79,7 @@ class DocChatController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$patient,$aid)
     {
         $chat=new Chat();
         $chat->text=$request->msg;
@@ -75,6 +94,8 @@ class DocChatController extends Controller
         $session=new Session();
         $session->docUId=Auth::user()->id;
         $session->patientUId=$request->patientUId;
+        $session->appointmentId=$aid;
+        $session->seid=$request->session()->get('sessId');
         //dd($session);
         return view('doctor.chat.index')->with('sess',$session);
     }

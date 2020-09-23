@@ -37,9 +37,12 @@ Route::group(['middleware'=>'DoctorProfile'],function(){
         Route::resource('doctor.forum',Controllers\DocForumController::class);
         Route::resource('doctor.forum.comment',Controllers\DocCommentController::class);
         //Route::resource('patient.docChatSession',Controllers\DocChatController::class);
-        Route::get('doctor/{patient}/chat',[Controllers\DocChatController::class,'index'])->name('docChat.index');
-        Route::post('doctor/{patient}/chat',[Controllers\DocChatController::class,'store'])->name('docChat.store');
+        Route::get('doctor/{patient}/appointment/{aid}/chat',[Controllers\DocChatController::class,'index'])->name('docChat.index');
+        Route::post('doctor/{patient}/appointment/{aid}/chat',[Controllers\DocChatController::class,'store'])->name('docChat.store');
         Route::get('chat/{patient}/getMessages',[Controllers\DocChatController::class,'getMessages']);
+        Route::get('doctor/chatSession/patient/{id}/healthRecord',[Controllers\DocHealthRecordController::class,'index']);
+        Route::post('doctor/{docId}/prescription',[Controllers\PrescriptionController::class,'store']);
+        Route::put('session/{sid}/edit',[Controllers\SessionController::class,'update'])->name('doctor.chat.end');
 
 
     });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HealthRecord;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DocHealthRecordController extends Controller
 {
@@ -12,9 +13,11 @@ class DocHealthRecordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request,$id)
     {
-        //
+        $hr=DB::table('health_records')
+            ->where('patientId',$request->patientId)->get()[0];
+        return response()->json($hr);
     }
 
     /**

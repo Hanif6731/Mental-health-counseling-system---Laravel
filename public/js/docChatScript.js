@@ -1,17 +1,19 @@
 $(document).ready(function () {
     var docUId=$('#docUId').val();
     var patientUId=$('#patientUId').val();
-    var baseUri="http://localhost:8000/chat/"+patientUId+"/getMessages";
+    var patientId=$('#patientId').val();
+    var aid=$('#appointmentId').val();
+    var sessId=$('#sessId').val();
+    var baseUri="http://localhost:8000/";
     var options = {
         year: 'numeric', month: 'numeric', day: 'numeric',
         hour: 'numeric', minute: 'numeric',
         hour12: true,
-        timeZone: 'Asia/Dhaka'
     };
     loadMessages();
 
     // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
+    Pusher.logToConsole = false;
 
     var pusher = new Pusher('9319a5f60c4f65cfaa9f', {
         cluster: 'mt1'
@@ -40,10 +42,62 @@ $(document).ready(function () {
         $('#chatBody').html(html+htmlOld);
     });
 
+    $('#btnHealthInfo').click(function () {
+        loadHealthRecord();
+    });
+
+    $('#btnPrescribe').click(function () {
+        $('#prescriptionModal').modal('show');
+    });
+
+    $('#btnSaveMed').click(function (e) {
+        e.preventDefault();
+        var medicine={
+            medName:$('#medName').val(),
+            quantity:$('#medQty').val(),
+            medType:$('#medType').val(),
+            duration:$('#medDuration').val(),
+            timing:$('#medTiming').val(),
+            notes:$('#medNote').val(),
+            patientId:patientId,
+            sessId:sessId,
+        };
+        var flag=true;
+        for(var key in medicine){
+            //console.log(val);
+            if(medicine[key]=="" || medicine[key]==null){
+                flag=false;
+                break;
+            }
+        }
+        if(flag) {
+            $('#errMsg').html('');
+            postMed(medicine);
+        }
+        else {
+            $('#errMsg').html('All fields are required');
+        }
+
+    });
+
+    function postMed(medicine){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.post(baseUri+'doctor/'+docUId+'/prescription',medicine,function (data,status) {
+            alert(status);
+            console.log(data);
+        }).fail(function (e) {
+           console.log(e.responseText);
+        });
+    };
+
 
     function loadMessages(){
 
-        $.get(baseUri,{patientId:patientUId},function (data,status) {
+        $.get(baseUri+"chat/"+patientUId+"/getMessages",{patientId:patientUId},function (data,status) {
             console.log(data)
             html='';
             for (let i=0;i<data.length;i++){
@@ -74,6 +128,27 @@ $(document).ready(function () {
         }).fail(function (err) {
             console.log(err.responseText);
         })
+    }
+
+    function loadHealthRecord() {
+        $.get(baseUri+"doctor/chatSession/patient/"+patientId+"/healthRecord",
+            {patientId:patientId,},
+            function (data,status) {
+            var date=new Date(data.updated_at);
+            data.updated_at=new Intl.DateTimeFormat('en-US',options).format(date);
+               console.log(data);
+                $('#pHeight').html(data.height+" cm.");
+                $('#pWeight').html(data.weight+" kg.");
+                $('#pBp').html(data.bp+" mmHg");
+                $('#pPr').html(data.pulseRate+" bpm");
+                $('#pMood').html(data.mood);
+                $('#pDesc').html(data.description);
+                $('#pSd').html(data.sleepDuration+" Hours");
+                $('#pUDate').html(data.updated_at);
+                $('#hrModal').modal('show');
+            }).fail(function (data) {
+            console.log(data.responseText);
+        });
     }
 
 
