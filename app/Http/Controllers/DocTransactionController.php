@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-class TransactionController extends Controller
+class DocTransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,14 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        $transaction=DB::table('transactions')
+            ->where('senderId',Auth::user()->id)
+            ->orWhere('receiverId',Auth::user()->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+            return view('doctor.reports.earning')->with('info',$transaction);
+
     }
 
     /**
