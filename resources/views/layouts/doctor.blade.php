@@ -110,6 +110,7 @@
                                 <a class="dropdown-item text-dark" href="#"><i class="fa fa-comment"></i> {{__('Chat')}}</a>
                                 <a class="dropdown-item text-dark" href="{{route('doctor.forum.index',Auth::user()->id)}}"><i class="fa fa-sticky-note"></i> {{__('Forum')}}</a>
                                 <a class="dropdown-item text-dark" href="{{route('doc.earning.index',Auth::user()->id)}}"><i class="fa fa-money-check-alt"></i> Earning Report</a>
+                                <a class="dropdown-item text-dark" href="{{route('doc.stat.apt',Auth::user()->id)}}"><i class="fa fa-file-alt"></i> Session Statistics Report</a>
                             </div>
                         </li>
 

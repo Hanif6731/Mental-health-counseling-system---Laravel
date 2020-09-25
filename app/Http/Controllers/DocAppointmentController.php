@@ -159,4 +159,37 @@ class DocAppointmentController extends Controller
         $response=Http::get('http://localhost:3000/search/'.$docId.'/'.$str);
         return $response->json();
     }
+
+    public function stat(Request $request){
+        $appointments=DB::table('appointments')
+            ->join('patients','appointments.patientId','=','patients.id')
+            ->where('docId',$request->session()->get('docId'))
+            ->get();
+        $accepted=0;
+        $declined=0;
+        $pending=0;
+        foreach ($appointments as $appointment){
+            if(strtolower($appointment->reqStatus)=='requested'){
+                $pending+=1;
+            }
+            elseif(strtolower($appointment->reqStatus)=='declined'){
+                $declined+=1;
+            }
+            else{
+                $accepted+=1;
+            }
+        }
+        $total=count($appointments);
+
+        $data=array(
+            "accepted"=>$accepted,
+            "declined"=>$declined,
+            "pending"=>$pending,
+            "total"=>$total
+        );
+
+        //dd($appointments);
+
+        return view('doctor.reports.statistics')->with('data',$data);
+    }
 }

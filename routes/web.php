@@ -45,6 +45,8 @@ Route::group(['middleware'=>'DoctorProfile'],function(){
         Route::put('session/{sid}/edit',[Controllers\SessionController::class,'update'])->name('doctor.chat.end');
         Route::get('doctor/{docId}/report/generate',[Controllers\DocReportGenController::class,'gen'])->name('doc.report.gen');
         Route::get('doctor/{docId}/report/earnings',[Controllers\DocTransactionController::class,'index'])->name('doc.earning.index');
+        Route::get('doctor/{docId}/statistics/appointments',[App\Http\Controllers\DocAppointmentController::class,'stat'])->name('doc.stat.apt');
+        Route::get('doctor/{docId}/statistics/generate',[App\Http\Controllers\DocReportGenController::class,'genStat'])->name('doc.stat.gen');
 
 
     });
