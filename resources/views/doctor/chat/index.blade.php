@@ -6,9 +6,17 @@
                 <div class="card bg-dark shadow-sm position-relative">
                     {{--                    <div class="card-header"></div>--}}
                     <div class="card-body text-center rounded">
+                        <div class="row">
+                            <div class="col-12 offset-sm-2 col-sm-8 text-danger">
+                                @foreach($errors->all() as $err)
+                                    {{$err}} <br>
+                                @endforeach
+                            </div>
+                        </div>
                         <div class="row"><div class="col-12">
                         <form method="post" action="{{route('docChat.store',[$sess->patientUId,$sess->appointmentId])}}" class="form-inline mr-auto d-inline text-center text-nowrap w-100">
                             @csrf
+
                             <input type="hidden" id="docUId" name="docUId"  value="{{Auth::user()->id}}">
                             <input type="hidden" id="patientUId" name="patientUId" value="{{$sess->patientUId}}">
                             <input type="hidden" id="appointmentId" name="appointmentId" value="{{$sess->appointmentId}}">

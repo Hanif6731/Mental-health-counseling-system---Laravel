@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\docSentEvent;
+use App\Http\Requests\DocChatRequests;
 use App\Models\Chat;
 use App\Models\Patient;
 use App\Models\Session;
@@ -79,7 +80,7 @@ class DocChatController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$patient,$aid)
+    public function store(DocChatRequests $request,$patient,$aid)
     {
         $chat=new Chat();
         $chat->text=$request->msg;

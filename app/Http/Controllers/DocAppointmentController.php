@@ -135,14 +135,15 @@ class DocAppointmentController extends Controller
         //
     }
 
-    public function accept(DocAppRequests $requests,$id){
+    public function accept(DocAppRequests $requests,$docId,$id){
+        //dd($id);
         $appointment=Appointment::find($id);
         $appointment->schedule=$requests->schedule;
         $appointment->docMsg=$requests->docMsg;
         $appointment->reqStatus='Accepted';
         $appointment->save();
         return redirect()->route('doctor.appointment.index',Auth::user()->id);
-        //dd((new \DateTime($requests->schedule))->format('yyyy-MM-dd HH:mm:ss'));
+        dd((new \DateTime($requests->schedule))->format('yyyy-MM-dd HH:mm:ss'));
     }
     public function decline($id){
         $appointment=Appointment::find($id);

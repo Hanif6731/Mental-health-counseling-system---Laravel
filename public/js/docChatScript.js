@@ -13,20 +13,22 @@ $(document).ready(function () {
     loadMessages();
 
     // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = false;
+    Pusher.logToConsole = true;
 
     var pusher = new Pusher('9319a5f60c4f65cfaa9f', {
         cluster: 'mt1'
     });
 
     var channel = pusher.subscribe('chatSession');
-    channel.bind('patientSent', function(data) {
+    channel.bind('patientSent', function(msg) {
         //data=JSON.stringify(data);
-        data=JSON.parse(data);
-        alert(data);
+        var data=new Object(msg);
+        console.log(data);
+
+        //alert(data);
         //console.log(JSON.stringify(data));
-        htmlOld=$('#chatBody').html();
-        html='';
+        var htmlOld=$('#chatBody').html();
+        var html='';
         if(data.senderId==patientUId && data.receiverId==docUId){
             var date=new Date();
             date=new Intl.DateTimeFormat('en-US',options).format(date)
@@ -34,9 +36,32 @@ $(document).ready(function () {
                 "<div class='col-6'>" +
                 "<div class='rounded text-dark text-left bg-light'>" +
                 "<p class='font-weight-bolder'>"+data.senderName+" | "+date+"</p>" +
-                "<p class='card p-2 rounded-lg text-dark bg-light float-left shadow-sm text-wrap' style='width: fit-content'>"+data.text+"</p>" +
+                "<p class='card p-2 rounded-lg text-dark bg-light float-left shadow-sm text-wrap' style='width: fit-content'>"+data.message+"</p>" +
                 "</div></div>" +
                 "<div class='col-6'></div>" +
+                "</div>"
+        }
+        $('#chatBody').html(html+htmlOld);
+    });
+
+    channel.bind('docSent', function(msg) {
+        //data=JSON.stringify(data);
+        var data=new Object(msg);
+        console.log(data);
+
+        //alert(data);
+        //console.log(JSON.stringify(data));
+        var htmlOld=$('#chatBody').html();
+        var html='';
+        if(data.senderId==docUId && data.receiverId==patientUId){
+            var date=new Date();
+            date=new Intl.DateTimeFormat('en-US',options).format(date)
+            html+="<div class='row mr-2 mb-2'><div class='col-6'></div>" +
+                "<div class='col-6'>" +
+                "<div class='rounded text-dark text-right bg-light'>" +
+                "<p class='font-weight-bolder'>"+date+" | You</p>" +
+                "<p class='card p-2 rounded-lg text-white bg-primary float-right shadow-sm text-wrap' style='width: fit-content'>"+data.message+"</p>" +
+                "</div></div>" +
                 "</div>"
         }
         $('#chatBody').html(html+htmlOld);
@@ -87,10 +112,12 @@ $(document).ready(function () {
             }
         });
         $.post(baseUri+'doctor/'+docUId+'/prescription',medicine,function (data,status) {
-            alert(status);
+            //alert(status);
             console.log(data);
         }).fail(function (e) {
            console.log(e.responseText);
+        }).done(function (data) {
+            alert('Prescription added successfully!!');
         });
     };
 

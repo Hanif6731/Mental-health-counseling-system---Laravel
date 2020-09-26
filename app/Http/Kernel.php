@@ -2,8 +2,11 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AdminProfileCompletion;
 use App\Http\Middleware\DoctorProfileCompletion;
+use App\Http\Middleware\DoctorType;
 use App\Http\Middleware\DoctorValidity;
+use App\Http\Middleware\StaffType;
 use App\Http\Middleware\VerifyStatus;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -68,5 +71,8 @@ class Kernel extends HttpKernel
         'DoctorProfile'=>DoctorProfileCompletion::class,
         'status'=>VerifyStatus::class,
         'docValidity'=>DoctorValidity::class,
+        'adminType'=>AdminProfileCompletion::class,
+        'staffType'=>StaffType::class,
+        'doctorType'=>DoctorType::class,
     ];
 }
